@@ -29,13 +29,17 @@ inquirer
 
     fs.readFile('./install.sh', function(err, data) {
         if(!err) {
-            var file = data
-            console.log(data)
+            var output = ""
+            var file = data.toString()
+            output = file.replace('SQUID_USERNAME', answers.username)
+            output = output.replace('SQUID_PASSWORD', answers.password)
+            output = output.replace('SQUID_PORT', answers.port)
+
+            if(answers.port != 3128) output = output.replace('#SED_SQUID_PORT', '/bin/sed -i "s/http_port 3128/http_port ' + answers.port + '/g" /etc/squid/squid.conf')
+
+            var CMD = `gcloud compute instances create ` + serverNames + ` --zone=` + answers.location + ` --machine-type=` + answers.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
+            console.log(CMD)
         }
     })
 
-    // var CMD = `gcloud compute instances create ` + serverNames + ` --zone=` + answers.location + ` --machine-type=` + instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='
-
-    // '`
-    console.log(CMD)
   });
