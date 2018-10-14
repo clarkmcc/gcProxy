@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports.locations = function() {
     var locationArray = [
         {name:"Moncks Corner, South Carolina, USA (us-east1-b)", value:"us-east1-b"},
         {name:"Ashburn, Virginia, USA (us-east4-a)", value:"us-east4-a"},
@@ -17,4 +17,11 @@ module.exports = function() {
         {name:"Sydney, Australia (australia-southeast1-a)", value:"australia-southeast1-a"},
     ]
     return locationArray
+}
+
+module.exports.instances = function() {
+    var instanceArray = [
+        {name:"Micro (f1-micro)", value:"f1-micro"},
+    ]
+    return instanceArray
 }
