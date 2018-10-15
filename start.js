@@ -1,4 +1,6 @@
 const fs = require('fs')
+const Compute = require('@google-cloud/compute');
+const compute = new Compute();
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const options = require('./options.js')
@@ -13,6 +15,7 @@ log("Follow the prompts to spin up Squid 3 proxy servers on Google Cloud Compute
 
 inquirer
   .prompt([
+    {type: "string", message:"GCP project name", name:"project"},
     {type: "list", message:"Server location", name:"location", choices:options.locations(), default: "us-east1-b"},
     {type: "number", message:"How many servers?", name:"qty", default: 1},
     {type: "number", message:"Instance type", name:"instance", choices:options.instances(), default: "f1-micro"},
@@ -21,6 +24,8 @@ inquirer
     {type: "password", message:"Squid password", name:"password", default: "admin"},
   ])
   .then(function(answers) {
+      
+
     var serverNames = ""
     for(var i=0; i<answers.qty; i++){
         var serverName = "gcProx-" + Date.now().toString()
