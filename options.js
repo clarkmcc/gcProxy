@@ -21,7 +21,17 @@ module.exports.locations = function() {
 
 module.exports.instances = function() {
     var instanceArray = [
-        {name:"Micro (f1-micro)", value:"f1-micro"},
+        {name:"Micro (f1-micro) - About $4/mo", value:"f1-micro"},
+        {name:"Small (g1-small)  - About $14/mo", value:"f1-small"},
+        {name:"n1-standard-1 (1CPU, 3.75GB) - About $24/mo", value:"n1-standard-1"},
+        {name:"n1-standard-2 (2CPU, 7.5GB) - About $48/mo", value:"n1-standard-2"},
+        {name:"n1-standard-4 (4CPU, 15GB) - About $97/mo", value:"n1-standard-4"},
+        {name:"n1-standard-8 (8CPU, 30GB) - About $194/mo", value:"n1-standard-8"},
+        {name:"n1-standard-16 (16CPU, 60GB) - About $388/mo", value:"n1-standard-16"},
+        {name:"n1-standard-32 (32CPU, 120GB) - About $776/mo", value:"n1-standard-32"},
+        {name:"n1-standard-64 (64CPU, 2405GB) - About $1553/mo", value:"n1-standard-64"},
+        {name:"n1-standard-96 (96CPU, 360GB) - About $2330/mo", value:"n1-standard-96"},
+
     ]
     return instanceArray
 }
