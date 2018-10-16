@@ -1,8 +1,5 @@
-gcloud compute instances create  gcprox-1539605240133-320 --zone=us-east1-b --machine-type=f1-micro --image-family=debian-9 --image-project=debian-cloud  --metadata startup-script='#!/bin/bash
+gcloud compute instances create  gcprox-1539656824370-750 --preemptible --zone=us-east1-b --machine-type=f1-micro --image-family=debian-9 --image-project=debian-cloud  --metadata startup-script='#!/bin/bash
 # Squid Installer
-
-susername=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/susername)
-spassword=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/spassword)
 
 /bin/rm -rf /etc/squid
 /usr/bin/apt update
@@ -16,7 +13,9 @@ touch /etc/squid/passwd
 
 #SED_SQUID_PORT
 
-/usr/bin/htpasswd -b -c /etc/squid/passwd $susername $spassword
+susername=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/susername) && spassword=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/spassword) && /usr/bin/htpasswd -b -c /etc/squid/passwd "$susername" "$spassword"
 
 systemctl enable squid
-systemctl restart squid'
+systemctl restart squid
+
+'

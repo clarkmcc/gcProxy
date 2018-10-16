@@ -39,7 +39,7 @@ inquirer
 
             if(answers.port != 3128) output = output.replace('#SED_SQUID_PORT', '/bin/sed -i "s/http_port 3128/http_port ' + answers.port + '/g" /etc/squid/squid.conf')
 
-            var command = `gcloud compute instances create ` + serverNames + ` --zone=` + answers.location + ` --machine-type=` + answers.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
+            var command = `gcloud compute instances create ` + serverNames + ` --preemptible --zone=` + answers.location + ` --machine-type=` + answers.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
 
             fs.writeFile('./output.sh', command, function() {
                 log("The gcloud command has been output to " + chalk.yellow('output.sh') + '. Copy the script and execute it in the Google cloud console.');
