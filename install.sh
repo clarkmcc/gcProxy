@@ -13,7 +13,7 @@ touch /etc/squid/passwd
 
 #SED_SQUID_PORT
 
-/usr/bin/htpasswd -b -c /etc/squid/passwd admin password
+/usr/bin/htpasswd -b -c /etc/squid/passwd SQUID_USERNAME SQUID_PASSWORD
 
 /usr/bin/wget --no-check-certificate -O /etc/squid/getmetadata.sh https://github.com/clarkmcc/gcProxy/blob/master/getmetadata.sh
 chmod +x /etc/squid/getmetadata.sh
