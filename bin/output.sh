@@ -1,4 +1,4 @@
-gcloud compute instances create  gcprox-1540035001052-962 --preemptible --zone=us-east1-b --machine-type=f1-micro --image-family=debian-9 --image-project=debian-cloud  --metadata startup-script='#!/bin/bash
+gcloud compute instances create  gcprox-1540768867581-995 --preemptible --zone=us-east1-b --machine-type=f1-micro --image-family=debian-9 --image-project=debian-cloud  --metadata startup-script='#!/bin/bash
 # Squid Installer
 
 /bin/rm -rf /etc/squid
@@ -13,7 +13,7 @@ touch /etc/squid/passwd
 
 #SED_SQUID_PORT
 
-/usr/bin/htpasswd -b -c /etc/squid/passwd admin password
+/usr/bin/htpasswd -b -c /etc/squid/passwd admin admin
 
 /usr/bin/wget --no-check-certificate -O /etc/squid/getmetadata.sh https://github.com/clarkmcc/gcProxy/blob/master/getmetadata.sh
 chmod +x /etc/squid/getmetadata.sh

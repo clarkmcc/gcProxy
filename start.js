@@ -1,7 +1,7 @@
 const fs = require('fs')
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-const options = require('./options.js')
+const options = require('./bin/options.js')
 const log = console.log;
 
 const header = chalk.bgYellow.black
@@ -18,6 +18,7 @@ inquirer
     {type: "list", message:"Server location", name:"location", choices:options.locations(), default: "us-east1-b"},
     {type: "number", message:"How many servers?", name:"qty", default: 1},
     {type: "list", message:"Instance type", name:"instance", choices:options.instances(), default: "f1-micro"},
+    {type: "preemtible", message: "Make server preemtible? ("}
     {type: "number", message:"Squid port", name:"port", default: 3128},
     {type: "string", message:"Squid username", name:"username", default: "admin"},
     {type: "password", message:"Squid password", name:"password", default: "admin"},
@@ -29,7 +30,7 @@ inquirer
         serverNames = serverNames + " " + serverName
     }
 
-    fs.readFile('./install.sh', function(err, data) {
+    fs.readFile('./bin/install.sh', function(err, data) {
         if(!err) {
             var output = ""
             var file = data.toString()
@@ -41,9 +42,9 @@ inquirer
 
             var command = `gcloud compute instances create ` + serverNames + ` --preemptible --zone=` + answers.location + ` --machine-type=` + answers.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
 
-            fs.writeFile('./output.sh', command, function() {
-                log("The gcloud command has been output to " + chalk.yellow('output.sh') + '. Copy the script and execute it in the Google cloud console.');
+            fs.writeFile('./bin/output.sh', command, function() {
                 log(chalk.red.bold("[DISCLAIMER] ") + "These gcloud commands execute procedures that can cause billing on the GCP to occur. Please make sure you know what you're doing (i.e. creating 20 n1 instances is not smart).")
+                log("The gcloud command has been output to " + chalk.yellow('output.sh') + '. Copy the script and execute it in the Google cloud shell.');
             })
         }
     })
