@@ -42,7 +42,7 @@ inquirer
 
             var command = `gcloud compute instances create ` + serverNames + ` --preemptible --zone=` + answers.location + ` --machine-type=` + answers.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
 
-            fs.writeFile('./bin/output.sh', command, function() {
+            fs.writeFile('./output.gcprox', command, function() {
                 log(chalk.red.bold("[DISCLAIMER] ") + "These gcloud commands execute procedures that can cause billing on the GCP to occur. Please make sure you know what you're doing (i.e. creating 20 n1 instances is not smart).")
                 log("The gcloud command has been output to " + chalk.yellow('output.sh') + '. Copy the script and execute it in the Google cloud shell.');
             })
