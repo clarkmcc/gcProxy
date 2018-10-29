@@ -35,3 +35,11 @@ module.exports.instances = function() {
     ]
     return instanceArray
 }
+
+module.exports.preemptible = function() {
+    var preemptibleArray = [
+        {name: "Yes", value: "--preemptible"},
+        {name: "No", value: ""}
+    ]
+    return preemptibleArray
+}

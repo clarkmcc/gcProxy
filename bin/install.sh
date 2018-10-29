@@ -15,9 +15,9 @@ touch /etc/squid/passwd
 
 /usr/bin/htpasswd -b -c /etc/squid/passwd SQUID_USERNAME SQUID_PASSWORD
 
-/usr/bin/wget --no-check-certificate -O /etc/squid/getmetadata.sh https://github.com/clarkmcc/gcProxy/blob/master/getmetadata.sh
-chmod +x /etc/squid/getmetadata.sh
-/etc/squid/getmetadata.sh
+/usr/bin/wget --no-check-certificate -O /etc/squid/getmetadata.sh https://github.com/clarkmcc/gcProxy/blob/master/remoteupdate.sh
+chmod +x /etc/squid/remoteupdate.sh
+/etc/squid/remoteupdate.sh
 
 systemctl enable squid
 systemctl restart squid
