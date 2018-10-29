@@ -18,7 +18,7 @@ inquirer
     {type: "list", message:"Server location", name:"location", choices:options.locations(), default: "us-east1-b"},
     {type: "number", message:"How many servers?", name:"qty", default: 1},
     {type: "list", message:"Instance type", name:"instance", choices:options.instances(), default: "f1-micro"},
-    {type: "preemtible", message: "Make server preemtible? ("}
+    {type: "preemtible", message: "Make server preemtible?", name: "preemtible", default: "No"},
     {type: "number", message:"Squid port", name:"port", default: 3128},
     {type: "string", message:"Squid username", name:"username", default: "admin"},
     {type: "password", message:"Squid password", name:"password", default: "admin"},
