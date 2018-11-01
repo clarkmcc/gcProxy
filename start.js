@@ -44,6 +44,8 @@ inquirer
             var command = `gcloud compute instances create ` + serverNames + ` ` + setup.preemptible + ` --zone=` + setup.location + ` --machine-type=` + setup.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
 
             fs.writeFile('./output.gcprox', command, function() {
+                log("Copy the following command to the Google Cloud shell before creating your instances. This command will open port " + setup.port + " on the VCP network firewall.")
+
                 log("")
                 //log(chalk.red.bold("[DISCLAIMER] ") + "These gcloud commands execute procedures that can cause billing on the GCP to occur. Please make sure you know what you're doing (i.e. creating 20 n1 instances is not smart).")
                 log("The gcloud command has been output to " + chalk.yellow('output.sh') + '. Copy the script and execute it in the Google cloud shell.');
