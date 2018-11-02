@@ -20,6 +20,7 @@
   "dependencies": {
     "@google-cloud/compute": "^0.10.0",
     "chalk": "^2.4.1",
-    "inquirer": "^6.2.0"
+    "inquirer": "^6.2.0",
+    "terminal-link": "^1.1.0"
   }
 }
