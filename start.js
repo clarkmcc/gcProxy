@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 const terminalLink = require('terminal-link');
 const http = require('http')
+const si = require('systeminformation')
 const options = require('./bin/options.js')
 const log = console.log;
 const permissionGranted = 200
@@ -11,12 +12,18 @@ const header = chalk.bgYellow.black
 function getRandomInt(min, max) { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min)) + min };
 
 http.get("http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=clarkmccc", function(res) {
+    profiler()
     if(res.statusCode == permissionGranted) {
         runner()
     } else {
        console.log('There was an issue validating your license key, please verify that your username was correct.')
     }
 })
+
+var profiler = function() {
+    var profile = {osInfo: null, networkInfo: null}
+    si.osInfo().then(osData => profile.osInfo = osData).then(si.networkInterfaces().then(neworkData => profile.networkInfo - networkData))
+}
 
 var runner = function() {
     log(header('   Google Cloud Proxy Maker   '))
