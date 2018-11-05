@@ -58,7 +58,7 @@ inquirer.prompt([
             })
         })
     } else {
-        console.log("We're sorry, please contact support about using this software without system profiler.")
+        console.log("We're sorry, please contact support (bmccauley4x+gcproxy@gmail.com) about using this software without system profiler.")
     }
 })
 
@@ -106,6 +106,8 @@ var runner = function() {
                     var proxy = setup
                     proxy.serverNames = serverNames
                     proxy.owner = owner
+                    proxy.datetime = getDateTime()
+                    proxy.timestamp = Math.floor(Date.now())
                     proxy.password = null
 
                     axios({
