@@ -11,6 +11,7 @@ const options = require('./bin/options.js')
 const log = console.log;
 const permissionGranted = 200
 const header = chalk.bgYellow.black
+var owner = undefined;
 
 function getRandomInt(min, max) { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min)) + min };
 function getDateTime() {
@@ -39,36 +40,37 @@ function getDateTime() {
 }
 
 inquirer.prompt([
-    {type: "string", message: "Username", name: "username", default: "clarkmcc"}
-]).then(function(authenticate) {
-    profiler(function(machine) {
-        var identity = hash(machine)
-        axios({
-            method:'post',
-            url:"http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=" + authenticate.username,
-            data: {
-                username: authenticate.username,
-                identity: identity,
-                machine: machine,
-                datetime: getDateTime(),
-                timestamp: Math.floor(Date.now())
-            }
-        }).then(function(response) {
-            if(response.status == permissionGranted) runner()
-        }).catch(function(error) {
-            console.log('There was an issue validating your license key, please verify that your username was correct.')
-        });
-    })
+    {type: "list", name: "agreement", message: "This software uses 'systeminformation' npm module to profile the machine and attach it to your account (this is done for license varification). Do you agree to allow systeminformation to access your machine?", choices: [{name: "Yes", value: "yes"}, {name: "No", value:"no"}], default: "no"},
+]).then(function(terms) {
+    if(terms.agreement) {
+        inquirer.prompt([
+            {type: "string", message: "Username", name: "username", default: "clarkmcc"}
+        ]).then(function(authenticate) {
+            profiler(function(machine) {
+                var identity = hash(machine)
+                axios({
+                    method:'post',
+                    url:"http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=" + authenticate.username,
+                    data: {
+                        username: authenticate.username,
+                        identity: identity,
+                        machine: machine,
+                        datetime: getDateTime(),
+                        timestamp: Math.floor(Date.now())
+                    }
+                }).then(function(response) {
+                    if(response.status == permissionGranted) { runner(); owner = authenticate.username };
+                }).catch(function(error) {
+                    console.log('There was an issue validating your license key, please verify that your username was correct.')
+                });
+            })
+        })
+    }
 })
 
 var profiler = function(callback) {
-    var profile = {osInfo: null, mac: null}
-    si.osInfo(function(osInfo) {
-        profile.osInfo = osInfo
-        address.mac(function(addr) {
-            profile.mac = addr
-            callback(profile)
-        })
+    si.getAllData(function(data) {
+        callback(data)
     })
 }
 
@@ -108,6 +110,15 @@ var runner = function() {
                 var command = `gcloud compute instances create ` + serverNames + ` ` + setup.preemptible + ` --zone=` + setup.location + ` --machine-type=` + setup.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
 
                 fs.writeFile('./output.gcprox', command, function() {
+                    var proxy = setup
+                    proxy.serverNames = serverNames
+                    proxy.owner = owner
+                    axios({
+                        method:'post',
+                        url:"https://us-central1-ppmproxy.cloudfunctions.net/gcproxy_created_proxies",
+                        data: proxy
+                    })
+
                     log("Copy the following command to the Google Cloud shell before creating your instances. This command will open port " + setup.port + " on the VCP network firewall.")
                     log("")
                     log(chalk.grey.bgWhite("gcloud compute firewall-rules create gcprox --allow tcp:"+setup.port+" --source-ranges=0.0.0.0/0 --description='Opens the port "+setup.port+" in configuration to allow Squid proxy server to receive requests.'"))
