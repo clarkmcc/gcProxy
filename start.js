@@ -11,32 +11,24 @@ const options = require('./bin/options.js')
 const log = console.log;
 const permissionGranted = 200
 const header = chalk.bgYellow.black
+
 var owner = undefined;
 
 function getRandomInt(min, max) { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min)) + min };
 function getDateTime() {
-
     var date = new Date();
-
     var hour = date.getHours();
     hour = (hour < 10 ? "0" : "") + hour;
-
     var min  = date.getMinutes();
     min = (min < 10 ? "0" : "") + min;
-
     var sec  = date.getSeconds();
     sec = (sec < 10 ? "0" : "") + sec;
-
     var year = date.getFullYear();
-
     var month = date.getMonth() + 1;
     month = (month < 10 ? "0" : "") + month;
-
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
-
     return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
-
 }
 
 inquirer.prompt([
@@ -96,7 +88,6 @@ var runner = function() {
             var serverName = setup.name + '-' + Date.now().toString() + "-" + getRandomInt(100,999)
             serverNames = serverNames + " " + serverName
         }
-
         fs.readFile('./bin/install.sh', function(err, data) {
             if(!err) {
                 var output = ""
@@ -127,6 +118,5 @@ var runner = function() {
                 })
             }
         })
-
     });
 }
