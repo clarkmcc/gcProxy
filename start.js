@@ -6,26 +6,58 @@ const http = require('http')
 const si = require('systeminformation')
 const hash = require('object-hash')
 const address = require('address')
+const axios = require('axios')
 const options = require('./bin/options.js')
 const log = console.log;
 const permissionGranted = 200
 const header = chalk.bgYellow.black
 
 function getRandomInt(min, max) { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min)) + min };
+function getDateTime() {
+
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    return year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+
+}
 
 inquirer.prompt([
-    {type: "string", message: "Username", name: "username"}
+    {type: "string", message: "Username", name: "username", default: "clarkmcc"}
 ]).then(function(authenticate) {
-    http.get("http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=" + authenticate.username, function(res) {
-        if(res.statusCode == permissionGranted) {
-            runner()
-            profiler(function(machine) {
-                var identity = hash(machine)
-                console.log(identity)
-            })
-        } else {
-        console.log('There was an issue validating your license key, please verify that your username was correct.')
-        }
+    profiler(function(machine) {
+        var identity = hash(machine)
+        axios({
+            method:'post',
+            url:"http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=" + authenticate.username,
+            data: {
+                username: authenticate.username,
+                identity: identity,
+                machine: machine,
+                datetime: getDateTime(),
+                timestamp: Math.floor(Date.now())
+            }
+        }).then(function(response) {
+            if(response.status == permissionGranted) runner()
+        }).catch(function(error) {
+            console.log('There was an issue validating your license key, please verify that your username was correct.')
+        });
     })
 })
 
