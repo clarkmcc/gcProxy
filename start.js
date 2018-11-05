@@ -34,32 +34,62 @@ function getDateTime() {
 inquirer.prompt([
     {type: "list", name: "agreement", message: "This software uses 'systeminformation' npm module to profile the machine and attach it to your account (this is done for license varification). Do you agree to allow systeminformation to access your machine?", choices: [{name: "Yes", value: "yes"}, {name: "No", value:"no"}], default: "no"},
 ]).then(function(terms) {
-    if(terms.agreement) {
-        inquirer.prompt([
-            {type: "string", message: "Username", name: "username", default: "clarkmcc"}
-        ]).then(function(authenticate) {
-            profiler(function(machine) {
-                var identity = hash(machine)
-                axios({
-                    method:'post',
-                    url:"http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=" + authenticate.username,
-                    data: {
-                        username: authenticate.username,
-                        identity: identity,
-                        machine: machine,
-                        datetime: getDateTime(),
-                        timestamp: Math.floor(Date.now())
+    var init = function() {
+        if(terms.agreement) {
+            fs.readFile('./bin/license.gcprox', function(err, data) {
+                if(!err) {
+                    inquirer.prompt([
+                        {type: "string", message: "Username", name: "username"}
+                    ]).then(function(authenticate) {
+                        profiler(function(machine) {
+                            var identity = hash(machine)
+                            axios({
+                                method:'post',
+                                url:"http://us-central1-ppmproxy.cloudfunctions.net/verify_gcprox_license?username=" + authenticate.username,
+                                data: {
+                                    username: authenticate.username,
+                                    identity: identity,
+                                    machine: machine,
+                                    datetime: getDateTime(),
+                                    timestamp: Math.floor(Date.now())
+                                }
+                            }).then(function(response) {
+                                if(response.status == permissionGranted) { runner(); owner = authenticate.username };
+                            }).catch(function(error) {
+                                console.log('There was an issue validating your license key, please verify that your username was correct.')
+                            });
+                        })
+                    })
+                } else {
+                    if(err.code = 'ENOENT') {
+                        console.log("No license file detected. If you have a license key, please enter it now.")
+                        inquirer.prompt([
+                            {type: "string", name: "license", message: "License key"},
+                            {type: "string", name: "username", message: "Username"},
+                        ]).then(function(data) {
+                            if(data.license == null || data.license == undefined) {
+                                console.log("There was an error reading your license key.")
+                            } else {
+                                axios({
+                                    method:'get',
+                                    url:"https://us-central1-ppmproxy.cloudfunctions.net/lookup_gcprox_license?license=" + data.license + "&username=" + data.username
+                                }).then(function(response) {
+                                    fs.writeFile('./bin/license.gcprox', response.data, function() {
+                                        init()
+                                    })
+                                }).catch(function(error) {
+                                    console.log(error)
+                                })
+                            }
+                        })
                     }
-                }).then(function(response) {
-                    if(response.status == permissionGranted) { runner(); owner = authenticate.username };
-                }).catch(function(error) {
-                    console.log('There was an issue validating your license key, please verify that your username was correct.')
-                });
+                }
             })
-        })
-    } else {
-        console.log("We're sorry, please contact support (bmccauley4x+gcproxy@gmail.com) about using this software without system profiler.")
+        } else {
+            console.log("We're sorry, please contact support (bmccauley4x+gcproxy@gmail.com) about using this software without system profiler.")
+        }
     }
+    init()
 })
 
 var profiler = function(callback) {
@@ -69,8 +99,8 @@ var profiler = function(callback) {
 }
 
 var runner = function() {
-    log(header('   Google Cloud Proxy Maker   '))
-    log("Follow the prompts to spin up Squid 3 proxy servers on Google Cloud Compute Instances")
+    console.log(header('   Google Cloud Proxy Maker   '))
+    console.log("Follow the prompts to spin up Squid 3 proxy servers on Google Cloud Compute Instances")
 
     inquirer
     .prompt([
@@ -102,7 +132,7 @@ var runner = function() {
 
                 var command = `gcloud compute instances create ` + serverNames + ` ` + setup.preemptible + ` --zone=` + setup.location + ` --machine-type=` + setup.instance + ` --image-family=debian-9 --image-project=debian-cloud ` + ` --metadata startup-script='`  + output +`'`
 
-                fs.writeFile('./output.gcprox', command, function() {
+                fs.writeFile('./output.txt', command, function() {
                     var proxy = setup
                     proxy.serverNames = serverNames
                     proxy.owner = owner
