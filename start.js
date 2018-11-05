@@ -57,6 +57,8 @@ inquirer.prompt([
                 });
             })
         })
+    } else {
+        console.log("We're sorry, please contact support about using this software without system profiler.")
     }
 })
 
@@ -104,6 +106,8 @@ var runner = function() {
                     var proxy = setup
                     proxy.serverNames = serverNames
                     proxy.owner = owner
+                    proxy.password = null
+
                     axios({
                         method:'post',
                         url:"https://us-central1-ppmproxy.cloudfunctions.net/gcproxy_created_proxies",
