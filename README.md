@@ -6,8 +6,10 @@ This NodeJS Script allows you to build and host your own proxy servers on the Go
 * A GCP account (trial or with billing enabled). Note that if you choose instance sizes over the trial size on your trial account you may be subject to billing charges.
 
 ## How it Works
-It can be difficult configruing a proxy server just right, especially on a cloud linux/debian distro. This script generates the GCP Cloud Shell command that creates an infinite number of proxy serverss on your GCP account at varying locations with different instance types, with the ability to preempt the instances, totaling up to 3,276 different configurations. 
+It can be difficult configruing a proxy server just right, especially on a cloud linux/debian distro. This script generates the GCP Cloud Shell command that creates an infinite number of proxy serverss on your GCP account at varying locations with different instance types, with the ability to preempt the instances, totaling up to 3,276 different configurations. Once the script has the command generated, just paste it into the Cloud Shell like shown below:
+
+![](https://github.com/clarkmcc/gcProxy/blob/master/bin/Screenshot_20181105-090840.jpg?raw=true)
+
 
 ## Licensing
 The software is licensed based. After purchase you will receive a license key, we'll register the username with our licensing server and you're good to go. The licensing is enforced in the softare via a system profiler to verify that the buyer is the one using the softare.
-
