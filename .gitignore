@@ -66,3 +66,4 @@ typings/
 # other files
 obfuscated.js
 output.txt
+keyfile.json
