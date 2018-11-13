@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/clarkmcc/gcProxy/issues"
   },
-  "homepage": "https://github.com/clarkmcc/gcProxy#readme"
+  "homepage": "https://github.com/clarkmcc/gcProxy#readme",
+  "dependencies": {
+    "@google-cloud/compute": "^0.10.0"
+  }
 }
