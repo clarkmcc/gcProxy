@@ -3,16 +3,18 @@ var app = angular.module('gcproxy', ['ngMaterial', 'ngAria', 'ngMessages', 'ngRe
 app.config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.otherwise("/app");
-    $stateProvider.state({
-        name: "app",
+    $stateProvider.state('app', {
         url: "/app",
-        templateUrl: "app/views/app.html",
         views: {
-            "nav@app": {
-                templateUrl: "app/views/nav/nav.html"
+            "nav": {
+                templateUrl: "app/views/nav/nav.html",
+            },
+            "dashboard": {
+                templateUrl: "app/views/dashboard/dashboard.html",
             }
         }
     })
+
 
 
 }).config(function($mdThemingProvider) {
