@@ -6,16 +6,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state({
         name: "app",
         url: "/app",
-        templateUrl: "app/views/app.html"
-    }).state({
-        name: "app.nav",
-        url: "/nav",
-        templateUrl: "app/views/nav/nav.html",
-        controller: "nav"
-    }).state({
-        name: "app.body",
-        url: "/dashboard",
-        templateUrl: "app/views/dashboard/dashboard.html",
+        templateUrl: "app/views/app.html",
+        views: {
+            "nav@app": {
+                templateUrl: "app/views/nav/nav.html"
+            }
+        }
     })
 
 
