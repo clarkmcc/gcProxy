@@ -3,7 +3,6 @@ const vm = require('./vm.js');
 module.exports.create = function(config) {
     /*
     / Author: Clark McCauley
-    / Date: November 12th, 2018
     / Usage:
 
     vm.create({
@@ -40,7 +39,6 @@ module.exports.create = function(config) {
 module.exports.getData = function(config) {
     /*
     / Author: Clark McCauley
-    / Date: November 12th, 2018
     / Usage:
     /
 
@@ -82,10 +80,19 @@ module.exports.getData = function(config) {
     })
 }
 
+module.exports.getVMs = function(config) {
+    return new Promise(function(resolve, reject) {
+        config.computeObject.getVMs({
+            maxResults: 2
+        }).then(function(data) {
+            resolve(data)
+        })
+    })
+}
+
 module.exports.getConfig = function(config) {
     /*
     / Author: Clark McCauley
-    / Date: November 12th, 2018
     / Usage:
 
     vm.getConfig({machineType: "f1-micro", type: "proxy"})
