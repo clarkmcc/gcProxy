@@ -1,3 +1,27 @@
-<h1>Dashboard</h1>
-<ui-view="nav"></ui-view>
-<ui-view="body"></ui-view>
+
+<div ng-controller="dashboard" ng-cloak >
+  <md-content class="md-padding" layout-xs="column" layout="row">
+    <div flex-xs flex-gt-xs="50" layout="column">
+      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Proxies</span>
+            <span class="md-subhead">Intances with 'proxy' label</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-content>
+            <table>
+                <
+            </table>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button>Action 1</md-button>
+          <md-button>Action 2</md-button>
+        </md-card-actions>
+      </md-card>
+    </div>
+  </md-content>
+</div>

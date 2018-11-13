@@ -1,4 +1,4 @@
-var app = angular.module('gcproxy', ['ngMaterial', 'ngAria', 'ngMessages', 'ngResource', 'ui.router']);
+var app = angular.module('gcproxy', ['ngMaterial', 'ngAria', 'ngMessages', 'ngResource', 'ui.router', 'ngMdIcons']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
@@ -8,9 +8,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
         views: {
             "nav": {
                 templateUrl: "app/views/nav/nav.html",
+                controller: "nav"
             },
             "dashboard": {
                 templateUrl: "app/views/dashboard/dashboard.html",
+                controller: "dashboard"
             }
         }
     })
