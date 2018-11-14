@@ -15,6 +15,13 @@ const compute = new Compute({
 
 app.use(express.static("public"))
 
+app.get("/api/getvms", function(req,res) {
+    vm.getVMs({computeObject: compute}).then(function(data) {
+        console.log(data[0][0].metadata)
+        res.send(data)
+    })
+})
+
 // ui.getVMs(compute, vm, cliui)
 
 app.listen(process.env.PORT || 3000, function(err) {

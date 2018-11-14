@@ -1,20 +1,36 @@
-
+<style>
+    table{
+        padding:10px,
+    }
+</style>
 <div ng-controller="dashboard" ng-cloak >
   <md-content class="md-padding" layout-xs="column" layout="row">
-    <div flex-xs flex-gt-xs="50" layout="column">
+    <div flex-xs flex-gt-xs="100" layout="column">
       <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline">Proxies</span>
-            <span class="md-subhead">Intances with 'proxy' label</span>
+            <!-- <span class="md-subhead">Intances with 'proxy' label</span> -->
           </md-card-title-text>
-          <md-card-title-media>
-            <div class="md-media-lg card-media"></div>
-          </md-card-title-media>
         </md-card-title>
         <md-card-content>
             <table>
-                <
+                <tr>
+                    <th style="text-align:left">Instance Name</th>
+                    <th style="text-align:left">Status</th>
+                    <th style="text-align:left">External NAT</th>
+                    <th style="text-align:left">Preemptible</th>
+                    <th>Actions</th>
+                </tr>
+                <tr ng-repeat="vm in vms">
+                    <td>{{vm.name}}</td>
+                    <td style="color:{{statusColor(vm.metadata.status)}}">{{vm.metadata.status}}</td>
+                    <td>{{vm.metadata.networkInterfaces[0].accessConfigs[0].natIP}}</td>
+                    <td>{{vm.metadata.scheduling.preemptible}}</td>
+                    <td>
+                        <md-button class="md-warn">Stop</md-button>
+                    </td>
+                </tr>
             </table>
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">

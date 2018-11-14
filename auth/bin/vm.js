@@ -83,7 +83,7 @@ module.exports.getData = function(config) {
 module.exports.getVMs = function(config) {
     return new Promise(function(resolve, reject) {
         config.computeObject.getVMs({
-            maxResults: 2
+            maxResults: 200
         }).then(function(data) {
             resolve(data)
         })
