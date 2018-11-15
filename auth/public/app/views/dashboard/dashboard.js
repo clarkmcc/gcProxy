@@ -20,5 +20,6 @@ app.controller('dashboard', function($scope, $http) {
                 return "black";
         }
     }
+
 })
 
